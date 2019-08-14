@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'dart:math';
+import 'package:flutter/gestures.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_game_langaw/componentes/moscas.dart';
@@ -45,7 +46,14 @@ class LangawGame extends Game {
   void resize(Size tamanho) {
     tamanTela = tamanho;
     tamanTelha = tamanTela.width / 9;
+  }
 
+  void onTapDown(TapDownDetails d) {
+    moscas.forEach((Mosca mosca) {  
+     if (mosca.moscaRect.contains(d.globalPosition)) {
+       mosca.onTapDown();
+     }
+    });
   }
 
 }

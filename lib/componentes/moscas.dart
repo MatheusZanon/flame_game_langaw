@@ -17,6 +17,10 @@ class Mosca {
   }
 
   void update(double t) {
+  
+  }
+
+  void onTapDown() {
 
   }
 
