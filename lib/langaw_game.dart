@@ -31,7 +31,7 @@ class LangawGame extends Game {
   void render(Canvas canvas) {
     Rect backgRect =  Rect.fromLTWH(0, 0, tamanTela.width, tamanTela.height);
     Paint backgPaint = Paint();
-    backgPaint.color = Color(0xff8e44ad);
+    backgPaint.color = Color(0xff3d3d3d);
     canvas.drawRect(backgRect, backgPaint);
     moscas.forEach((Mosca mosca) {mosca.render(canvas);} ); //para cada mosca, renderiza o canvas
     // forEach precisa tem o formato padrao de conter um parametro para cada item da lista que vai no (), 
@@ -40,10 +40,11 @@ class LangawGame extends Game {
   }
 
   void update(double t) {    
-   moscas.forEach((Mosca mosca) {mosca.update(t);} ); 
-  }
-
-  void resize(Size tamanho) {
+   moscas.forEach((Mosca mosca) {mosca.update(t);} );            //chama o método update do componente mosca.dart para cada mosca da lista,
+   moscas.removeWhere((Mosca mosca) {return mosca.saiuDaTela;} ); //ou seja, presente na tela e depois checa se o topo do retangulo da mosca
+  }                                                            //é maior que a altura da tela, se nao for (se for menor), a mosca é removida
+                                                                //da lista, isso evita dados desnecessarios no processo e a sobrecarregar o
+  void resize(Size tamanho) {                                   //aparelho
     tamanTela = tamanho;
     tamanTelha = tamanTela.width / 9;
   }
