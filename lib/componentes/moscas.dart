@@ -32,5 +32,4 @@ class Mosca {
     moscaPaint.color = Color(0xffff3838); 
     game.spawnMosca();
   }
-
 }
