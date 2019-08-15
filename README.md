@@ -1,3 +1,4 @@
 # flame_game_langaw
 
-Parte 1 do projeto de game com flutter e o plugin flame
+Nome: Langaw
+Projeto de game com flutter e o plugin flame
