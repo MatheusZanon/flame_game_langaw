@@ -1,21 +1,26 @@
 import 'dart:ui';
 import 'package:flame_game_langaw/langaw_game.dart';
+import 'package:flame/sprite.dart';
 
 class Mosca {
   final LangawGame game;
   Rect moscaRect;
-  Paint moscaPaint;
   bool taMorta = false;  //variavel que checa se a mosca morreu
   bool saiuDaTela = false;
+  List<Sprite> moscaVoandoSprite;
+  Sprite mortaSprite;
+  double voandoSpriteIndex = 0;
 
   Mosca(this.game, double x, double y) {
     moscaRect = Rect.fromLTWH(x, y, game.tamanTelha, game.tamanTelha);
-    moscaPaint = Paint();
-    moscaPaint.color = Color(0xff27ae60);
   }
 
   void render(Canvas c) {
-    c.drawRect(moscaRect, moscaPaint);
+    if (taMorta) {
+       mortaSprite.renderRect(c, moscaRect.inflate(4));
+    } else {
+      moscaVoandoSprite[voandoSpriteIndex.toInt()].renderRect(c, moscaRect.inflate(4));
+    }
   }
 
   void update(double t) {                                              
@@ -33,7 +38,6 @@ class Mosca {
 
   void onTapDown() {
     taMorta = true;
-    moscaPaint.color = Color(0xffff3838); 
     game.spawnMosca();
   }
 }

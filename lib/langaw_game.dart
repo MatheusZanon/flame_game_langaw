@@ -4,6 +4,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_game_langaw/componentes/moscas.dart';
+import 'package:flame_game_langaw/componentes/house_fly.dart';
+import 'package:flame_game_langaw/componentes/agile_fly.dart';
+import 'package:flame_game_langaw/componentes/drooler_fly.dart';
+import 'package:flame_game_langaw/componentes/hungry_fly.dart';
+import 'package:flame_game_langaw/componentes/macho_fly.dart';
 import 'package:flame_game_langaw/componentes/quintal.dart';
 
 
@@ -35,7 +40,23 @@ class LangawGame extends Game {
   void spawnMosca(){
     double x = rnd.nextDouble() * (tamanTela.width - tamanTelha);
     double y = rnd.nextDouble() * (tamanTela.height - tamanTelha);
-    moscas.add(Mosca(this, x, y));  
+    switch (rnd.nextInt(5)) {
+    case 0:  
+      moscas.add(HouseFly(this, x, y));  
+      break;
+    case 1:  
+      moscas.add(AgileFly(this, x, y));  
+      break;
+    case 2:  
+      moscas.add(HungryFly(this, x, y));  
+      break;
+    case 3:  
+      moscas.add(MachoFly(this, x, y));  
+      break;
+    case 4:  
+      moscas.add(DroolerFly(this, x, y));  
+      break;
+    }
   }
   
   void render(Canvas canvas) {
