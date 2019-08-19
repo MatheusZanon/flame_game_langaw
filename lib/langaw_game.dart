@@ -26,6 +26,8 @@ class LangawGame extends Game {
     rnd = Random();
     resize(await Flame.util.initialDimensions());
 
+    //background deve ser colocado após o tamanho da tela ser determinado porque 
+    //o constructor usa os valores das variaveis tamanTela e tamanTelha
     background = Quintal(this);
     spawnMosca();  
   } 
@@ -33,7 +35,7 @@ class LangawGame extends Game {
   void spawnMosca(){
     double x = rnd.nextDouble() * (tamanTela.width - tamanTelha);
     double y = rnd.nextDouble() * (tamanTela.height - tamanTelha);
-    moscas.add(Mosca(this, x, y));
+    moscas.add(Mosca(this, x, y));  
   }
   
   void render(Canvas canvas) {
