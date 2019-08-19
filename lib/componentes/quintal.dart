@@ -8,7 +8,7 @@ class Quintal {
   Rect backgRect;
 
   Quintal(this.game) {
-    backgSprite = Sprite('imagens/agile-fly-1.png');
+    backgSprite = Sprite('background/backyard.png');
     backgRect = Rect.fromLTWH(0, 
                               game.tamanTela.height - (game.tamanTelha * 23), 
                               game.tamanTelha * 9, 

@@ -9,6 +9,7 @@ void main() async {
   Util flameUtil = Util();
   await flameUtil.fullScreen();
   await flameUtil.setOrientation(DeviceOrientation.portraitUp);
+  
   Flame.images.loadAll(<String>[
     'background/backyard.png',
     'moscas/agile-fly-1.png',
