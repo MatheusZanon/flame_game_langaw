@@ -38,8 +38,8 @@ class LangawGame extends Game {
   } 
 
   void spawnMosca(){
-    double x = rnd.nextDouble() * (tamanTela.width - tamanTelha);
-    double y = rnd.nextDouble() * (tamanTela.height - tamanTelha);
+    double x = rnd.nextDouble() * (tamanTela.width - tamanTelha * 2.025);
+    double y = rnd.nextDouble() * (tamanTela.height - tamanTelha * 2.025);
     switch (rnd.nextInt(5)) {
     case 0:  
       moscas.add(HouseFly(this, x, y));  
@@ -76,18 +76,19 @@ class LangawGame extends Game {
   }
 
   void update(double t) {    
-   moscas.forEach((Mosca mosca) {mosca.update(t);} );           
-   moscas.removeWhere((Mosca mosca) {return mosca.saiuDaTela;} ); 
-  
-   //chama o método update do componente mosca.dart para cada mosca da lista,
-  //ou seja, presente na tela e depois checa se o topo do retangulo da mosca
-  //é maior que a altura da tela, se nao for (se for menor), a mosca é removida
-  //da lista, isso evita dados desnecessarios no processo e a sobrecarregar o aparelho
-  }                                                            
+    moscas.forEach((Mosca mosca) {mosca.update(t);} );           
+    moscas.removeWhere((Mosca mosca) {return mosca.saiuDaTela;} ); 
+    
+    //chama o método update do componente mosca.dart para cada mosca da lista,
+    //ou seja, presente na tela e depois checa se o topo do retangulo da mosca
+    //é maior que a altura da tela, se nao for (se for menor), a mosca é removida
+    //da lista, isso evita dados desnecessarios no processo e a sobrecarregar o aparelho
+    }                                                            
                                                                 
   void resize(Size tamanho) {        
     tamanTela = tamanho;
     tamanTelha = tamanTela.width / 9;
+    //tamanTela recebe as dimensoes da tela do dispositivo e tamanTelha divide a largura por 9 pedaços, criando as "telhas" 
   }
 
   void onTapDown(TapDownDetails d) {
