@@ -4,6 +4,8 @@ import 'package:flame_game_langaw/componentes/moscas.dart';
 import 'package:flame_game_langaw/langaw_game.dart';
 
 class MachoFly extends Mosca {
+  double get velocidade => game.tamanTelha * 2.5;
+
   MachoFly(LangawGame game, double x, double y) : super(game) {
     moscaRect = Rect.fromLTWH(x, y, game.tamanTelha * 2.025, game.tamanTelha * 2.025);
     moscaVoandoListaSprite = List<Sprite>();
