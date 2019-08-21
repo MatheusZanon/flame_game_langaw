@@ -24,22 +24,22 @@ flutter:
   assets:
     - assets/images/background/backyard.png
     - assets/images/background/lose-splash.png
-    - assets/images/moscas/agile-fly-1.png
-    - assets/images/moscas/agile-fly-2.png
-    - assets/images/moscas/agile-fly-dead.png
-    - assets/images/moscas/drooler-fly-1.png
-    - assets/images/moscas/drooler-fly-2.png
-    - assets/images/moscas/drooler-fly-dead.png
-    - assets/images/moscas/house-fly-1.png
-    - assets/images/moscas/house-fly-2.png
-    - assets/images/moscas/house-fly-dead.png
-    - assets/images/moscas/hungry-fly-1.png
-    - assets/images/moscas/hungry-fly-2.png
-    - assets/images/moscas/hungry-fly-dead.png
-    - assets/images/moscas/macho-fly-1.png
-    - assets/images/moscas/macho-fly-2.png
-    - assets/images/moscas/macho-fly-dead.png
-    - assets/images/interface/title.png
+    - assets/images/flies/agile-fly-1.png
+    - assets/images/flies/agile-fly-2.png
+    - assets/images/flies/agile-fly-dead.png
+    - assets/images/flies/drooler-fly-1.png
+    - assets/images/flies/drooler-fly-2.png
+    - assets/images/flies/drooler-fly-dead.png
+    - assets/images/flies/house-fly-1.png
+    - assets/images/flies/house-fly-2.png
+    - assets/images/flies/house-fly-dead.png
+    - assets/images/flies/hungry-fly-1.png
+    - assets/images/flies/hungry-fly-2.png
+    - assets/images/flies/hungry-fly-dead.png
+    - assets/images/flies/macho-fly-1.png
+    - assets/images/flies/macho-fly-2.png
+    - assets/images/flies/macho-fly-dead.png
+    - assets/images/branding/title.png
     - assets/images/interface/dialog-credits.png
     - assets/images/interface/dialog-help.png
     - assets/images/interface/icon-credits.png

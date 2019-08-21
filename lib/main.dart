@@ -13,33 +13,33 @@ void main() async {
   Flame.images.loadAll(<String>[
     'background/backyard.png',
     'background/lose-splash.png',
-    'moscas/agile-fly-1.png',
-    'moscas/agile-fly-2.png',
-    'moscas/agile-fly-dead.png',
-    'moscas/drooler-fly-1.png',
-    'moscas/drooler-fly-2.png',
-    'moscas/drooler-fly-dead.png',
-    'moscas/house-fly-1.png',
-    'moscas/house-fly-2.png',
-    'moscas/house-fly-dead.png',
-    'moscas/hungry-fly-1.png',
-    'moscas/hungry-fly-2.png',
-    'moscas/hungry-fly-dead.png',
-    'moscas/macho-fly-1.png',
-    'moscas/macho-fly-2.png',
-    'moscas/macho-fly-dead.png',
+    'flies/agile-fly-1.png',
+    'flies/agile-fly-2.png',
+    'flies/agile-fly-dead.png',
+    'flies/drooler-fly-1.png',
+    'flies/drooler-fly-2.png',
+    'flies/drooler-fly-dead.png',
+    'flies/house-fly-1.png',
+    'flies/house-fly-2.png',
+    'flies/house-fly-dead.png',
+    'flies/hungry-fly-1.png',
+    'flies/hungry-fly-2.png',
+    'flies/hungry-fly-dead.png',
+    'flies/macho-fly-1.png',
+    'flies/macho-fly-2.png',
+    'flies/macho-fly-dead.png',
+    'branding/title.png',
     'interface/dialog-credits.png', 
     'interface/dialog-help.png', 
     'interface/icon-credits.png', 
     'interface/icon-help.png', 
     'interface/start-button.png',
-    'interface/title.png'
   ]);
 
   LangawGame game = LangawGame();
   runApp(game.widget);
 
-  TapGestureRecognizer pressionaTela = TapGestureRecognizer();
-  pressionaTela.onTapDown = game.onTapDown;
-  flameUtil.addGestureRecognizer(pressionaTela);
+  TapGestureRecognizer tapper = TapGestureRecognizer();
+  tapper.onTapDown = game.onTapDown;
+  flameUtil.addGestureRecognizer(tapper);
 }
