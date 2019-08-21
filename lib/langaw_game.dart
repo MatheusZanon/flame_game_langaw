@@ -10,6 +10,8 @@ import 'package:flame_game_langaw/componentes/drooler_fly.dart';
 import 'package:flame_game_langaw/componentes/hungry_fly.dart';
 import 'package:flame_game_langaw/componentes/macho_fly.dart';
 import 'package:flame_game_langaw/componentes/quintal.dart';
+import 'package:flame_game_langaw/janelas/janelas.dart';
+import 'package:flame_game_langaw/janelas/pagina_inicial.dart';
 
 
 class LangawGame extends Game {
@@ -18,12 +20,13 @@ class LangawGame extends Game {
   Quintal background;
   List<Mosca> moscas;
   Random rnd;
+  Janela janelaAtiva = Janela.inicial;
+  PaginaInicial paginaInicial;
   
   LangawGame() {          
     initialize();                     
-  
-  // constructor necessario pra chamar o método initialize,
-  // que por ser assincrono nao pode ser iniciado diretamente no constructor
+   /*constructor necessario pra chamar o método initialize,
+   que por ser assincrono nao pode ser iniciado diretamente no constructor */
   }                
 
   void initialize() async {
@@ -31,9 +34,10 @@ class LangawGame extends Game {
     rnd = Random();
     resize(await Flame.util.initialDimensions());
 
-    //background deve ser colocado após o tamanho da tela ser determinado porque 
-    //o constructor usa os valores das variaveis tamanTela e tamanTelha
+    /*background deve ser colocado após o tamanho da tela ser determinado porque 
+    o constructor usa os valores das variaveis tamanTela e tamanTelha*/
     background = Quintal(this);
+    paginaInicial = PaginaInicial(this);
     spawnMosca();  
   } 
 
@@ -62,6 +66,8 @@ class LangawGame extends Game {
   void render(Canvas canvas) {
     background.render(canvas);
     moscas.forEach((Mosca mosca) => mosca.render(canvas));
+    if (janelaAtiva == Janela.inicial) paginaInicial.render(canvas);
+
 
     /*Rect backgRect =  Rect.fromLTWH(0, 0, tamanTela.width, tamanTela.height);
     Paint backgPaint = Paint();
@@ -69,20 +75,20 @@ class LangawGame extends Game {
     canvas.drawRect(backgRect, backgPaint);
     moscas.forEach((Mosca mosca) {mosca.render(canvas);} ); */ 
     
-    //para cada mosca, renderiza o canvas
-    // forEach precisa tem o formato padrao de conter um parametro para cada item da lista que vai no (), 
-    // e uma function também para cada item da lista que vai no {}.
-    // ((Mosca mosca) {mosca.render(canvas);} ); poderia ter sido escrito como > ((Mosca mosca) => mosca.render(canvas));
+    /*para cada mosca, renderiza o canvas
+     forEach precisa tem o formato padrao de conter um parametro para cada item da lista que vai no (), 
+     e uma function também para cada item da lista que vai no {}.
+     ((Mosca mosca) {mosca.render(canvas);} ); poderia ter sido escrito como > ((Mosca mosca) => mosca.render(canvas)); */
   }
 
   void update(double t) {    
     moscas.forEach((Mosca mosca) {mosca.update(t);} );           
     moscas.removeWhere((Mosca mosca) {return mosca.saiuDaTela;} ); 
     
-    //chama o método update do componente mosca.dart para cada mosca da lista,
-    //ou seja, presente na tela e depois checa se o topo do retangulo da mosca
-    //é maior que a altura da tela, se nao for (se for menor), a mosca é removida
-    //da lista, isso evita dados desnecessarios no processo e a sobrecarregar o aparelho
+    /*chama o método update do componente mosca.dart para cada mosca da lista,
+    ou seja, presente na tela e depois checa se o topo do retangulo da mosca
+    é maior que a altura da tela, se nao for (se for menor), a mosca é removida
+    da lista, isso evita dados desnecessarios no processo e a sobrecarregar o aparelho */
     }                                                            
                                                                 
   void resize(Size tamanho) {        

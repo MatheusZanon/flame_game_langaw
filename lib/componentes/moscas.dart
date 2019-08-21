@@ -57,9 +57,10 @@ class Mosca {
         determinarAlvo();
       }
     } 
-    //translate é uma propriedade da classe Rect que recria o retangulo
-    //as novas coordenadas especificadas, no caso, 0 representa X e
-    //game.tamanTelha * 8 * t representa Y por meio da formula da variavel t de deslocamento
+    
+    /*translate é uma propriedade da classe Rect que recria o retangulo
+    as novas coordenadas especificadas, no caso, 0 representa X e
+    game.tamanTelha * 8 * t representa Y por meio da formula da variavel t de deslocamento */
   }                                                                  
   
   void onTapDown() {

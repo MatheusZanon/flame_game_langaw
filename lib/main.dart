@@ -12,6 +12,7 @@ void main() async {
   
   Flame.images.loadAll(<String>[
     'background/backyard.png',
+    'background/lose-splash.png',
     'moscas/agile-fly-1.png',
     'moscas/agile-fly-2.png',
     'moscas/agile-fly-dead.png',
@@ -27,6 +28,12 @@ void main() async {
     'moscas/macho-fly-1.png',
     'moscas/macho-fly-2.png',
     'moscas/macho-fly-dead.png',
+    'interface/dialog-credits.png', 
+    'interface/dialog-help.png', 
+    'interface/icon-credits.png', 
+    'interface/icon-help.png', 
+    'interface/start-button.png',
+    'interface/title.png'
   ]);
 
   LangawGame game = LangawGame();

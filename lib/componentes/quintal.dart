@@ -16,8 +16,8 @@ class Quintal {
                              );
   }
 
-  void render(Canvas canvas){
-    backgSprite.renderRect(canvas, backgRect);
+  void render(Canvas c){
+    backgSprite.renderRect(c, backgRect);
   }
 
   void update(double t){}

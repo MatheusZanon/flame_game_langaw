@@ -23,6 +23,7 @@ flutter:
 
   assets:
     - assets/images/background/backyard.png
+    - assets/images/background/lose-splash.png
     - assets/images/moscas/agile-fly-1.png
     - assets/images/moscas/agile-fly-2.png
     - assets/images/moscas/agile-fly-dead.png
@@ -38,3 +39,9 @@ flutter:
     - assets/images/moscas/macho-fly-1.png
     - assets/images/moscas/macho-fly-2.png
     - assets/images/moscas/macho-fly-dead.png
+    - assets/images/interface/title.png
+    - assets/images/interface/dialog-credits.png
+    - assets/images/interface/dialog-help.png
+    - assets/images/interface/icon-credits.png
+    - assets/images/interface/icon-help.png
+    - assets/images/interface/start-button.png
