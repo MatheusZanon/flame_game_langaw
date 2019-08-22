@@ -12,6 +12,7 @@ import 'package:flame_game_langaw/components/macho_fly.dart';
 import 'package:flame_game_langaw/components/backyard.dart';
 import 'package:flame_game_langaw/views.dart';
 import 'package:flame_game_langaw/views/home_view.dart';
+import 'package:flame_game_langaw/components/start_button.dart';
 
 class LangawGame extends Game {
   Size screenSize;
@@ -21,6 +22,8 @@ class LangawGame extends Game {
   Random rnd;
   View activeView = View.home;
   HomeView homeView;
+  StartButton startButton;
+
   
   LangawGame() {          
    initialize();                     
@@ -37,6 +40,7 @@ class LangawGame extends Game {
     o constructor usa os valores das variaveis screenSize e tileSize*/
     background = Backyard(this);
     homeView = HomeView(this);
+    startButton = StartButton(this);
     spawnFly();  
   } 
 
@@ -67,6 +71,9 @@ class LangawGame extends Game {
     flies.forEach((Fly fly) => fly.render(canvas));
     
     if (activeView == View.home) homeView.render(canvas);
+    if (activeView == View.home || activeView == View.lost) {
+      startButton.render(canvas);
+    }
 
     /*Rect backgRect =  Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
     Paint backgPaint = Paint();
@@ -97,11 +104,30 @@ class LangawGame extends Game {
   }
 
   void onTapDown(TapDownDetails d) {
-    flies.forEach((Fly fly) {  
-     if (fly.flyRect.contains(d.globalPosition)) {
-       fly.onTapDown();
-     }
-    });
+    bool isHandled = false; // lembra se um cuidador de taps ja foi chamado
+    
+    //startbutton
+    if(!isHandled && startButton.rect.contains(d.globalPosition)) {
+      if (activeView == View.home || activeView == View.lost) {
+        startButton.onTapDown();
+        isHandled = true;      
+      }
+    }
+    
+    //flies
+    if(!isHandled) {  
+      bool didHitAFly = false;
+      flies.forEach((Fly fly) {  
+        if (fly.flyRect.contains(d.globalPosition)) {
+          fly.onTapDown();
+          isHandled = true;
+          didHitAFly = true;
+        }
+      });
+      if(activeView == View.playing && !didHitAFly) {
+        activeView = View.lost; 
+      }
+    }  
   }
 
 }
