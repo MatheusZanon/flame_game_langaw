@@ -10,7 +10,8 @@ import 'package:flame_game_langaw/components/drooler_fly.dart';
 import 'package:flame_game_langaw/components/hungry_fly.dart';
 import 'package:flame_game_langaw/components/macho_fly.dart';
 import 'package:flame_game_langaw/components/backyard.dart';
-
+import 'package:flame_game_langaw/views.dart';
+import 'package:flame_game_langaw/views/home_view.dart';
 
 class LangawGame extends Game {
   Size screenSize;
@@ -18,8 +19,8 @@ class LangawGame extends Game {
   Backyard background;
   List<Fly> flies;
   Random rnd;
-  //View activeView = View.home;
-  //HomeView homeView;
+  View activeView = View.home;
+  HomeView homeView;
   
   LangawGame() {          
    initialize();                     
@@ -35,7 +36,7 @@ class LangawGame extends Game {
     /*background deve ser colocado após o tamanho da tela ser determinado porque 
     o constructor usa os valores das variaveis screenSize e tileSize*/
     background = Backyard(this);
-    //homeView = HomeView(this);
+    homeView = HomeView(this);
     spawnFly();  
   } 
 
@@ -64,8 +65,8 @@ class LangawGame extends Game {
   void render(Canvas canvas) {
     background.render(canvas);
     flies.forEach((Fly fly) => fly.render(canvas));
-    //if (activeView == View.home) homeView.render(canvas);
-
+    
+    if (activeView == View.home) homeView.render(canvas);
 
     /*Rect backgRect =  Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
     Paint backgPaint = Paint();
