@@ -13,6 +13,7 @@ import 'package:flame_game_langaw/components/backyard.dart';
 import 'package:flame_game_langaw/views.dart';
 import 'package:flame_game_langaw/views/home_view.dart';
 import 'package:flame_game_langaw/components/start_button.dart';
+import 'package:flame_game_langaw/views/lost_view.dart';
 
 class LangawGame extends Game {
   Size screenSize;
@@ -23,6 +24,7 @@ class LangawGame extends Game {
   View activeView = View.home;
   HomeView homeView;
   StartButton startButton;
+  LostView lostView;
 
   
   LangawGame() {          
@@ -41,6 +43,7 @@ class LangawGame extends Game {
     background = Backyard(this);
     homeView = HomeView(this);
     startButton = StartButton(this);
+    lostView = LostView(this);
     spawnFly();  
   } 
 
@@ -74,6 +77,8 @@ class LangawGame extends Game {
     if (activeView == View.home || activeView == View.lost) {
       startButton.render(canvas);
     }
+    //fala pro startbutton aparecer tanto na tela "home" quanto na "lost"
+    if (activeView == View.lost) lostView.render(canvas);
 
     /*Rect backgRect =  Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
     Paint backgPaint = Paint();
