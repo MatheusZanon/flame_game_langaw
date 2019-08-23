@@ -10,22 +10,34 @@ import 'package:flame_game_langaw/components/drooler_fly.dart';
 import 'package:flame_game_langaw/components/hungry_fly.dart';
 import 'package:flame_game_langaw/components/macho_fly.dart';
 import 'package:flame_game_langaw/components/backyard.dart';
+import 'package:flame_game_langaw/components/start_button.dart';
+import 'package:flame_game_langaw/components/help_button.dart';
+import 'package:flame_game_langaw/components/credits_button.dart';
+import 'package:flame_game_langaw/controller/spawner.dart';
 import 'package:flame_game_langaw/views.dart';
 import 'package:flame_game_langaw/views/home_view.dart';
-import 'package:flame_game_langaw/components/start_button.dart';
 import 'package:flame_game_langaw/views/lost_view.dart';
+import 'package:flame_game_langaw/views/help_view.dart';
+import 'package:flame_game_langaw/views/credits_view.dart';
 
 class LangawGame extends Game {
   Size screenSize;
   double tileSize;
+  Random rnd;
+  
   Backyard background;
   List<Fly> flies;
-  Random rnd;
+  StartButton startButton;
+  HelpButton helpButton;
+  CreditsButton creditsButton;
+  
+  FlySpawner spawner;
+  
   View activeView = View.home;
   HomeView homeView;
-  StartButton startButton;
   LostView lostView;
-
+  HelpView helpView;
+  CreditsView creditsView;
   
   LangawGame() {          
    initialize();                     
@@ -41,10 +53,14 @@ class LangawGame extends Game {
     /*background deve ser colocado após o tamanho da tela ser determinado porque 
     o constructor usa os valores das variaveis screenSize e tileSize*/
     background = Backyard(this);
-    homeView = HomeView(this);
     startButton = StartButton(this);
+    helpButton = HelpButton(this);
+    creditsButton = CreditsButton(this);
+    spawner = FlySpawner(this); 
+    homeView = HomeView(this);
     lostView = LostView(this);
-    spawnFly();  
+    helpView = HelpView(this);
+    creditsView = CreditsView(this);
   } 
 
   void spawnFly(){
@@ -74,11 +90,15 @@ class LangawGame extends Game {
     flies.forEach((Fly fly) => fly.render(canvas));
     
     if (activeView == View.home) homeView.render(canvas);
+    if (activeView == View.lost) lostView.render(canvas);
+    //fala pro startbutton, helpbutton e creditsbutton aparecerem tanto na tela "home" quanto na "lost"
     if (activeView == View.home || activeView == View.lost) {
       startButton.render(canvas);
+      helpButton.render(canvas);
+      creditsButton.render(canvas);
     }
-    //fala pro startbutton aparecer tanto na tela "home" quanto na "lost"
-    if (activeView == View.lost) lostView.render(canvas);
+    if (activeView == View.help) helpView.render(canvas);
+    if (activeView == View.credits) creditsView.render(canvas);
 
     /*Rect backgRect =  Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
     Paint backgPaint = Paint();
@@ -93,14 +113,16 @@ class LangawGame extends Game {
   }
 
   void update(double t) {    
+    spawner.update(t);
+    //chama a instância do controlador FlySpawner. Controllers são chamados no metodo update e não no render, já que não usam nada gráfico
+    
     flies.forEach((Fly fly) {fly.update(t);} );           
     flies.removeWhere((Fly fly) {return fly.isOffScreen;} ); 
-    
     /*chama o método update do componente flies.dart para cada mosca da lista,
     ou seja, presente na tela, e depois checa se o topo do retangulo da mosca
     é maior que a altura da tela, se nao for (se for menor), a mosca é removida
     da lista, isso evita dados desnecessarios no processo e a sobrecarregar o aparelho */
-    }                                                            
+  }                                                            
                                                                 
   void resize(Size size) {        
     screenSize = size;
@@ -109,8 +131,16 @@ class LangawGame extends Game {
   }
 
   void onTapDown(TapDownDetails d) {
-    bool isHandled = false; // lembra se um cuidador de taps ja foi chamado
+    bool isHandled = false; // lembra se o cuidador de taps ja foi chamado
     
+    //dialog boxes
+    if(!isHandled) {
+      if(activeView == View.help || activeView == View.credits) {
+        activeView = View.home;
+        isHandled = true;
+      }
+    }
+
     //startbutton
     if(!isHandled && startButton.rect.contains(d.globalPosition)) {
       if (activeView == View.home || activeView == View.lost) {
@@ -118,7 +148,23 @@ class LangawGame extends Game {
         isHandled = true;      
       }
     }
+
+    //helpbutton
+    if(!isHandled && helpButton.rect.contains(d.globalPosition)) {
+      if (activeView == View.home || activeView == View.lost) {
+        helpButton.onTapDown();
+        isHandled = true;      
+      }
+    }
     
+    //creditsbutton
+    if(!isHandled && creditsButton.rect.contains(d.globalPosition)) {
+      if (activeView == View.home || activeView == View.lost) {
+        creditsButton.onTapDown();
+        isHandled = true;      
+      }
+    }
+
     //flies
     if(!isHandled) {  
       bool didHitAFly = false;
@@ -132,7 +178,8 @@ class LangawGame extends Game {
       if(activeView == View.playing && !didHitAFly) {
         activeView = View.lost; 
       }
-    }  
+    } 
+ 
   }
 
 }
