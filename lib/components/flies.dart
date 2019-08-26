@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flame_game_langaw/langaw_game.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame_game_langaw/views.dart';
 
 class Fly {
   final LangawGame game;
@@ -64,6 +65,10 @@ class Fly {
   
   void onTapDown() {
     isDead = true;
+
+    if (game.activeView == View.playing) {
+      game.score += 1;
+    }
   }
 
 }
