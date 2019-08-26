@@ -19,6 +19,7 @@ import 'package:flame_game_langaw/views/home_view.dart';
 import 'package:flame_game_langaw/views/lost_view.dart';
 import 'package:flame_game_langaw/views/help_view.dart';
 import 'package:flame_game_langaw/views/credits_view.dart';
+import 'package:flame_game_langaw/components/score_display.dart';
 
 class LangawGame extends Game {
   Size screenSize;
@@ -32,12 +33,15 @@ class LangawGame extends Game {
   CreditsButton creditsButton;
   
   FlySpawner spawner;
+  ScoreDisplay scoreDisplay;
   
   View activeView = View.home;
   HomeView homeView;
   LostView lostView;
   HelpView helpView;
   CreditsView creditsView;
+
+  int score;
   
   LangawGame() {          
    initialize();                     
@@ -46,6 +50,7 @@ class LangawGame extends Game {
   }                
 
   void initialize() async {
+    score = 0;
     flies = List<Fly>();
     rnd = Random();
     resize(await Flame.util.initialDimensions());
@@ -57,6 +62,7 @@ class LangawGame extends Game {
     helpButton = HelpButton(this);
     creditsButton = CreditsButton(this);
     spawner = FlySpawner(this); 
+    scoreDisplay = ScoreDisplay(this);
     homeView = HomeView(this);
     lostView = LostView(this);
     helpView = HelpView(this);
@@ -87,6 +93,8 @@ class LangawGame extends Game {
   
   void render(Canvas canvas) {
     background.render(canvas);
+    if (activeView == View.playing) scoreDisplay.render(canvas);
+    // pro score ficar acima do background mas atras de todo o resto, ele precisa ser renderizado logo apos o background
     flies.forEach((Fly fly) => fly.render(canvas));
     
     if (activeView == View.home) homeView.render(canvas);
@@ -122,6 +130,7 @@ class LangawGame extends Game {
     ou seja, presente na tela, e depois checa se o topo do retangulo da mosca
     é maior que a altura da tela, se nao for (se for menor), a mosca é removida
     da lista, isso evita dados desnecessarios no processo e a sobrecarregar o aparelho */
+    if (activeView == View.playing) scoreDisplay.update(t);
   }                                                            
                                                                 
   void resize(Size size) {        
