@@ -5,6 +5,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/util.dart';
 import 'package:flame_game_langaw/langaw_game.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flame_game_langaw/bgm.dart';
 
 void main() async {
   Util flameUtil = Util();
@@ -39,6 +40,10 @@ void main() async {
     'ui/icon-help.png', 
     'ui/start-button.png',
     'ui/callout.png',
+    'ui/icon-music-disabled.png',
+    'ui/icon-music-enabled.png',
+    'ui/icon-sound-disabled.png',
+    'ui/icon-sound-enabled.png',
   ]);
 
   //desabilita o log de extra debugs no debugconsole, pra nao escrever informaçao demais
@@ -67,6 +72,7 @@ void main() async {
 
   LangawGame game = LangawGame(storage);
   runApp(game.widget);
+  BGM.attachWidgetBindingListener();
 
   TapGestureRecognizer tapper = TapGestureRecognizer();
   tapper.onTapDown = game.onTapDown;

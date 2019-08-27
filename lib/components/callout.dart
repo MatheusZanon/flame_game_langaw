@@ -39,17 +39,20 @@ class Callout {
       if (fly.game.activeView == View.playing) {
         value = value - 0.5 * t;
         if (value <= 0) {
-          Flame.audio.play('sfx/haha' + (fly.game.rnd.nextInt(5) + 1).toString() + '.ogg');
+          if(fly.game.soundButton.isEnabled) {
+            Flame.audio.play('sfx/haha' + (fly.game.rnd.nextInt(5) + 1).toString() + '.ogg');
+          }
+          fly.game.playHomeBGM();
           fly.game.activeView = View.lost;
         }
       }
-
+  
       rect = Rect.fromLTWH(
         fly.flyRect.left - (fly.game.tileSize * 0.25),
         fly.flyRect.top - (fly.game.tileSize * 0.5),
         fly.game.tileSize * 0.75,
         fly.game.tileSize * 0.75,
-     );
+      );
 
       textPainter.text = TextSpan(
         text: (value * 10).toInt().toString(),

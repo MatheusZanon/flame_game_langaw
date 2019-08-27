@@ -75,19 +75,23 @@ class Fly {
   }                                                                  
   
   void onTapDown() {
-    isDead = true;
-
     /*chama o método play da livraria de audio do Flame, passando o nome do arquivo de audio que vai ser usado 
     quando a mosca morre. O + 1 é acrescentado para o array que inicialmente vai de 0 a 10, passe a ir de 1 a 11
     e assim coincida com os numeros dos arquivos de som */
-    Flame.audio.play('sfx/ouch' + (game.rnd.nextInt(11) + 1).toString() + '.ogg');
+    if (!isDead) {
+      if(game.soundButton.isEnabled) {
+        Flame.audio.play('sfx/ouch' + (game.rnd.nextInt(11) + 1).toString() + '.ogg');
+      }
+      
+      isDead = true;
 
-    // adiciona + 1 no score para cada mosca que morrer no tap do player e salvando pontuaçao mais alta no highscore
-    if (game.activeView == View.playing) {  
-      game.score += 1;
-      if (game.score > (game.storage.getInt('highscore') ?? 0)) {
-        game.storage.setInt('highscore', game.score);
-        game.highscoreDisplay.updateHighscore();      
+      // adiciona + 1 no score para cada mosca que morrer no tap do player e salvando pontuaçao mais alta no highscore
+      if (game.activeView == View.playing) {  
+        game.score += 1;
+        if (game.score > (game.storage.getInt('highscore') ?? 0)) {
+          game.storage.setInt('highscore', game.score);
+          game.highscoreDisplay.updateHighscore();      
+        }
       }
     }
   }
