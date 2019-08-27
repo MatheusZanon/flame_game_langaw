@@ -22,6 +22,7 @@ import 'package:flame_game_langaw/views/credits_view.dart';
 import 'package:flame_game_langaw/components/score_display.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flame_game_langaw/components/highscore_display.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class LangawGame extends Game {
   final SharedPreferences storage;
@@ -46,6 +47,9 @@ class LangawGame extends Game {
   CreditsView creditsView;
 
   int score;
+
+  AudioPlayer homeBGM;
+  AudioPlayer playingBGM;
   
   LangawGame(this.storage) {          
    initialize();                     
@@ -72,6 +76,14 @@ class LangawGame extends Game {
     lostView = LostView(this);
     helpView = HelpView(this);
     creditsView = CreditsView(this);
+
+    // nas versoes do Flame acima de 0.11.0, precisa trocar o "loop" por "loopLongAudio" para ser compativel com o AudioPLayer
+    homeBGM = await Flame.audio.loopLongAudio('bgm/home.mp3', volume: 0.25);
+    homeBGM.pause();
+    playingBGM = await Flame.audio.loopLongAudio('bgm/paying.mp3', volume: 0.25);
+    playingBGM.pause();
+
+    playHomeBGM();
   } 
 
   void spawnFly(){
@@ -191,6 +203,7 @@ class LangawGame extends Game {
         }
       });
       if(activeView == View.playing && !didHitAFly) {
+        Flame.audio.play('sfx/haha' + (rnd.nextInt(5) + 1).toString() + '.ogg'); //gera um dos sons de "haha" quando a view lost é chamada
         activeView = View.lost; 
       }
     } 

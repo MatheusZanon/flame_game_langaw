@@ -3,6 +3,7 @@ import 'package:flame/sprite.dart';
 import 'package:flutter/painting.dart';
 import 'package:flame_game_langaw/components/flies.dart';
 import 'package:flame_game_langaw/views.dart';
+import 'package:flame/flame.dart';
 
 class Callout {
    final Fly fly;
@@ -38,6 +39,7 @@ class Callout {
       if (fly.game.activeView == View.playing) {
         value = value - 0.5 * t;
         if (value <= 0) {
+          Flame.audio.play('sfx/haha' + (fly.game.rnd.nextInt(5) + 1).toString() + '.ogg');
           fly.game.activeView = View.lost;
         }
       }

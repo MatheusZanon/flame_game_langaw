@@ -31,11 +31,6 @@ class HighscoreDisplay {
      updateHighscore();
    }
 
-   void render(Canvas c) {
-     painter.paint(c, position);
-     //pinta o highscore na posiçao pre-calculada pelo metodo updateHighscore()
-   }
-
    void updateHighscore() {
      int highscore = game.storage.getInt('highscore') ?? 0;
 
@@ -48,8 +43,13 @@ class HighscoreDisplay {
 
      position = Offset(
        game.screenSize.width - (game.tileSize * 0.25) - painter.width,
-       game.tileSize * -0.25,
+       game.tileSize * 0.25,
      );
+   }
+
+   void render(Canvas c) {
+     painter.paint(c, position);
+     //pinta o highscore na posiçao pre-calculada pelo metodo updateHighscore()
    }
 
 
