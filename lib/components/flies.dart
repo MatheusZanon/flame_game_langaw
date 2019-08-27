@@ -23,21 +23,35 @@ class Fly {
   }
 
   void setTargetLocation() {
-    double x = game.rnd.nextDouble() * (game.screenSize.width - (game.tileSize * 2.025));
-    double y = game.rnd.nextDouble() * (game.screenSize.height - (game.tileSize * 2.025));
+    double x = game.rnd.nextDouble() * (game.screenSize.width - (game.tileSize * 1.35));
+    double y = (game.rnd.nextDouble() * (game.screenSize.height - (game.tileSize * 2.025))) + (game.tileSize * 1.5);
     targetLocation = Offset(x, y);
   } 
 
   void render(Canvas c) {
+    /*
+    c.drawRect(flyRect.inflate(flyRect.width / 2), (Paint()..color = Color(0x77ffffff))); 
+    desenha o rect branco
+    */
     if (isDead) {
-       deadSprite.renderRect(c, flyRect.inflate(2));
+       deadSprite.renderRect(c, flyRect.inflate(flyRect.width / 2)); 
+       /*
+       em vez de dar o valor lógico de pixel 2, passamos o width(largura) do rect dividido por 2, acrescentando metade da largura do rect em todos os lados  
+       e originando um novo rect com o dobro de comprimento nos lados em relação ao original.
+       de (flyRect.inflate(2)); passou para (flyRect.inflate(flyRect.width / 2));
+       */
     } 
     else {
-      flyingSprite[flyingSpriteIndex.toInt()].renderRect(c, flyRect.inflate(2));
+      flyingSprite[flyingSpriteIndex.toInt()].renderRect(c, flyRect.inflate(flyRect.width / 2));
       if (game.activeView == View.playing) {
         callout.render(c);
       }
     }
+    
+    /*
+    c.drawRect(flyRect, Paint()..color = Color(0x8800000)); 
+    desenha o rect cinza
+    */
   }
 
   void update(double t) {                                              
@@ -53,7 +67,7 @@ class Fly {
     else {
       //bater asas
       flyingSpriteIndex += 30 * t;
-      if (flyingSpriteIndex >= 2) {
+      while (flyingSpriteIndex >= 2) {
         flyingSpriteIndex -= 2;        
       }
       //mover a mosca
