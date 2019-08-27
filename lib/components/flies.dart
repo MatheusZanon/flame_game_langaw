@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flame_game_langaw/langaw_game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_game_langaw/views.dart';
+import 'package:flame_game_langaw/components/callout.dart';
 
 class Fly {
   final LangawGame game;
@@ -13,8 +14,10 @@ class Fly {
   double flyingSpriteIndex = 0;
   Offset targetLocation;
   double get speed => game.tileSize * 3;
+  Callout callout;
 
   Fly(this.game) {
+    callout = Callout(this);
     setTargetLocation();
   }
 
@@ -30,6 +33,9 @@ class Fly {
     } 
     else {
       flyingSprite[flyingSpriteIndex.toInt()].renderRect(c, flyRect.inflate(2));
+      if (game.activeView == View.playing) {
+        callout.render(c);
+      }
     }
   }
 
@@ -57,16 +63,21 @@ class Fly {
         flyRect = flyRect.shift(stepToTarget);
       }
       else {
-        flyRect = flyRect.shift(toTarget);
+       flyRect = flyRect.shift(toTarget);
        setTargetLocation();
+       
       }
-    } 
+      
+      //callout
+      callout.update(t); 
+    }
   }                                                                  
   
   void onTapDown() {
     isDead = true;
 
-    if (game.activeView == View.playing) {
+    // adiciona + 1 no score para cada mosca que morrer no tap do player 
+    if (game.activeView == View.playing) {  
       game.score += 1;
     }
   }
