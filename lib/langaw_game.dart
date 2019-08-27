@@ -20,8 +20,11 @@ import 'package:flame_game_langaw/views/lost_view.dart';
 import 'package:flame_game_langaw/views/help_view.dart';
 import 'package:flame_game_langaw/views/credits_view.dart';
 import 'package:flame_game_langaw/components/score_display.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flame_game_langaw/components/highscore_display.dart';
 
 class LangawGame extends Game {
+  final SharedPreferences storage;
   Size screenSize;
   double tileSize;
   Random rnd;
@@ -34,6 +37,7 @@ class LangawGame extends Game {
   
   FlySpawner spawner;
   ScoreDisplay scoreDisplay;
+  HighscoreDisplay highscoreDisplay;
   
   View activeView = View.home;
   HomeView homeView;
@@ -43,7 +47,7 @@ class LangawGame extends Game {
 
   int score;
   
-  LangawGame() {          
+  LangawGame(this.storage) {          
    initialize();                     
    /*constructor necessario pra chamar o método initialize,
    que por ser assincrono nao pode ser iniciado diretamente no constructor */
@@ -63,6 +67,7 @@ class LangawGame extends Game {
     creditsButton = CreditsButton(this);
     spawner = FlySpawner(this); 
     scoreDisplay = ScoreDisplay(this);
+    highscoreDisplay = HighscoreDisplay(this);
     homeView = HomeView(this);
     lostView = LostView(this);
     helpView = HelpView(this);
@@ -93,6 +98,7 @@ class LangawGame extends Game {
   
   void render(Canvas canvas) {
     background.render(canvas);
+    highscoreDisplay.render(canvas);
     if (activeView == View.playing) scoreDisplay.render(canvas);
     // pro score ficar acima do background mas atras de todo o resto, ele precisa ser renderizado logo apos o background
     flies.forEach((Fly fly) => fly.render(canvas));
