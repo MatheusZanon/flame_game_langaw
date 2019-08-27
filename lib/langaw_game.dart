@@ -20,8 +20,14 @@ import 'package:flame_game_langaw/views/lost_view.dart';
 import 'package:flame_game_langaw/views/help_view.dart';
 import 'package:flame_game_langaw/views/credits_view.dart';
 import 'package:flame_game_langaw/components/score_display.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flame_game_langaw/components/highscore_display.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flame_game_langaw/components/music_button.dart';
+import 'package:flame_game_langaw/components/sound_button.dart';
 
 class LangawGame extends Game {
+  final SharedPreferences storage;
   Size screenSize;
   double tileSize;
   Random rnd;
@@ -34,6 +40,7 @@ class LangawGame extends Game {
   
   FlySpawner spawner;
   ScoreDisplay scoreDisplay;
+  HighscoreDisplay highscoreDisplay;
   
   View activeView = View.home;
   HomeView homeView;
@@ -42,8 +49,13 @@ class LangawGame extends Game {
   CreditsView creditsView;
 
   int score;
+
+  AudioPlayer homeBGM;
+  AudioPlayer playingBGM;
+  MusicButton musicButton;
+  SoundButton soundButton;
   
-  LangawGame() {          
+  LangawGame(this.storage) {          
    initialize();                     
    /*constructor necessario pra chamar o método initialize,
    que por ser assincrono nao pode ser iniciado diretamente no constructor */
@@ -61,17 +73,41 @@ class LangawGame extends Game {
     startButton = StartButton(this);
     helpButton = HelpButton(this);
     creditsButton = CreditsButton(this);
-    spawner = FlySpawner(this); 
+    musicButton = MusicButton(this);
+    soundButton = SoundButton(this);
     scoreDisplay = ScoreDisplay(this);
+    highscoreDisplay = HighscoreDisplay(this);
+    
+    spawner = FlySpawner(this); 
     homeView = HomeView(this);
     lostView = LostView(this);
     helpView = HelpView(this);
     creditsView = CreditsView(this);
+
+    // nas versoes do Flame acima de 0.11.0, precisa trocar o "loop" por "loopLongAudio" para ser compativel com o AudioPLayer
+    homeBGM = await Flame.audio.loopLongAudio('bgm/home.mp3', volume: 0.25); // volumes válidos vao de 0 (mutado) a 1 (máximo)
+    homeBGM.pause();
+    playingBGM = await Flame.audio.loopLongAudio('bgm/playing.mp3', volume: 0.25);
+    playingBGM.pause();
+
+    playHomeBGM();
   } 
 
+  void playHomeBGM() {
+    playingBGM.pause();
+    playingBGM.seek(Duration.zero);
+    homeBGM.resume();
+  }
+
+  void playPlayingBGM() {
+    homeBGM.pause();
+    homeBGM.seek(Duration.zero);
+    playingBGM.resume();
+  }
+
   void spawnFly(){
-    double x = rnd.nextDouble() * (screenSize.width - tileSize * 2.025);
-    double y = rnd.nextDouble() * (screenSize.height - tileSize * 2.025);
+    double x = rnd.nextDouble() * (screenSize.width - (tileSize * 1.35));
+    double y = (rnd.nextDouble() * (screenSize.height - (tileSize * 2.85))) + (tileSize * 1.5);
     switch (rnd.nextInt(5)) {
     case 0:  
       flies.add(HouseFly(this, x, y));  
@@ -93,10 +129,16 @@ class LangawGame extends Game {
   
   void render(Canvas canvas) {
     background.render(canvas);
+    highscoreDisplay.render(canvas);
+   
     if (activeView == View.playing) scoreDisplay.render(canvas);
     // pro score ficar acima do background mas atras de todo o resto, ele precisa ser renderizado logo apos o background
-    flies.forEach((Fly fly) => fly.render(canvas));
     
+    /*para cada mosca, renderiza o canvas
+    forEach precisa tem o formato padrao de conter um parametro para cada item da lista que vai no (), 
+    e uma function também para cada item da lista que vai no {}.
+     poderia ter sido escrito como ((Fly fly) {fly.render(canvas);} ); */
+    flies.forEach((Fly fly) => fly.render(canvas));
     if (activeView == View.home) homeView.render(canvas);
     if (activeView == View.lost) lostView.render(canvas);
     //fala pro startbutton, helpbutton e creditsbutton aparecerem tanto na tela "home" quanto na "lost"
@@ -105,19 +147,17 @@ class LangawGame extends Game {
       helpButton.render(canvas);
       creditsButton.render(canvas);
     }
+    musicButton.render(canvas);
+    soundButton.render(canvas);
     if (activeView == View.help) helpView.render(canvas);
     if (activeView == View.credits) creditsView.render(canvas);
 
-    /*Rect backgRect =  Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
+    /*  ----- CODIGO ANTIGO, FOI TROCADO CONFORME A PROGRESSAO NO TUTORIAL ---------------
+    Rect backgRect =  Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
     Paint backgPaint = Paint();
     backgPaint.color = Color(0xff3d3d3d);
     canvas.drawRect(backgRect, backgPaint);
     flies.forEach((Fly fly) {fly.render(canvas);} ); */ 
-    
-    /*para cada mosca, renderiza o canvas
-     forEach precisa tem o formato padrao de conter um parametro para cada item da lista que vai no (), 
-     e uma function também para cada item da lista que vai no {}.
-     ((Fly fly) {fly.render(canvas);} ); poderia ter sido escrito como > ((Fly fly) => fly.render(canvas)); */
   }
 
   void update(double t) {    
@@ -149,6 +189,19 @@ class LangawGame extends Game {
         isHandled = true;
       }
     }
+    
+    //musicbutton
+    if (!isHandled && musicButton.rect.contains(d.globalPosition)) {
+      musicButton.onTapDown();
+      isHandled = true;
+    }
+
+    //soundbutton
+    if (!isHandled && soundButton.rect.contains(d.globalPosition)) {
+      soundButton.onTapDown();
+      isHandled = true;
+    }
+
 
     //startbutton
     if(!isHandled && startButton.rect.contains(d.globalPosition)) {
@@ -185,10 +238,13 @@ class LangawGame extends Game {
         }
       });
       if(activeView == View.playing && !didHitAFly) {
+        if(soundButton.isEnabled) {
+          Flame.audio.play('sfx/haha' + (rnd.nextInt(5) + 1).toString() + '.ogg'); //gera um dos sons de "haha" quando a view lost é chamada
+        }
+        playHomeBGM();
         activeView = View.lost; 
       }
     } 
- 
   }
 
 }
